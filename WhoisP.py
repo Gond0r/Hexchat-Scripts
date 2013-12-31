@@ -1,6 +1,6 @@
 __module_name__ = "WhoisScanner"
 __module_version__ = "0.001"
-__module_description__ = "Whois Scanner"
+__module_description__ = "WhoIs Scanner"
 
 print "\0034",__module_name__, __module_version__,"has been loaded\003"
 
@@ -78,29 +78,29 @@ def LoopAbort(word, word_eol, userdata):
 def EventsHook(word, word_eol, userdata):
 	hexchat.hook_print("WhoIs End", FnWhoisEnd)
 	hexchat.hook_print("WhoIs Channel/Oper Line", chanschk)
-	hexchat.hook_print("Whois Identified", EatUseless)
-	hexchat.hook_print("Whois idle Line", EatUseless)
-	hexchat.hook_print("Whois idle Line With Signon", EatUseless)
-	hexchat.hook_print("Whois Name Line", EatUseless)
-	hexchat.hook_print("Whois Real Host", EatUseless)
-	hexchat.hook_print("Whois Server Line", EatUseless)
-	hexchat.hook_print("Whois Special", EatUseless)
-	hexchat.hook_print("Whois Authenticated", EatUseless)
-	hexchat.hook_print("Whois Away Line", EatUseless)
+	hexchat.hook_print("WhoIs Identified", EatUseless)
+	hexchat.hook_print("WhoIs idle Line", EatUseless)
+	hexchat.hook_print("WhoIs idle Line With Signon", EatUseless)
+	hexchat.hook_print("WhoIs Name Line", EatUseless)
+	hexchat.hook_print("WhoIs Real Host", EatUseless)
+	hexchat.hook_print("WhoIs Server Line", EatUseless)
+	hexchat.hook_print("WhoIs Special", EatUseless)
+	hexchat.hook_print("WhoIs Authenticated", EatUseless)
+	hexchat.hook_print("WhoIs Away Line", EatUseless)
 	return hexchat.EAT_NONE
 
 def EventsUnHook(word, word_eol, userdata):
 	hexchat.unhook("WhoIs End")
 	hexchat.unhook("WhoIs Channel/Oper Line")
-	hexchat.unhook("Whois Identified")
-	hexchat.unhook("Whois idle Line")
-	hexchat.unhook("Whois idle Line With Signon")
-	hexchat.unhook("Whois Name Line")
-	hexchat.unhook("Whois Real Host")
-	hexchat.unhook("Whois Server Line")
-	hexchat.unhook("Whois Special")
-	hexchat.unhook("Whois Authenticated")
-	hexchat.unhook("Whois Away Line")
+	hexchat.unhook("WhoIs Identified")
+	hexchat.unhook("WhoIs idle Line")
+	hexchat.unhook("WhoIs idle Line With Signon")
+	hexchat.unhook("WhoIs Name Line")
+	hexchat.unhook("WhoIs Real Host")
+	hexchat.unhook("WhoIs Server Line")
+	hexchat.unhook("WhoIs Special")
+	hexchat.unhook("WhoIs Authenticated")
+	hexchat.unhook("WhoIs Away Line")
 	return hexchat.EAT_NONE
 
 hexchat.hook_command("SCAN", InitScan)
