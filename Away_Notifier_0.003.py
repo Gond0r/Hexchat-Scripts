@@ -1,8 +1,9 @@
 __module_name__ = "Users Away Notifier"
-__module_version__ = "0.002"
+__module_version__ = "0.003"
 __module_description__ = "Get notified in the active window when users set away or set back."
 # Todos:
 # 1. add a setting for notification color
+# 2. add a setting for who check frequency (with a warning note if less than 5 seconds)
 
 import hexchat
 
@@ -41,6 +42,7 @@ def WhoRPL(word,word_eol,userdata):
         nickname_idx = 6
         nickname_flag_idx = 7
     nickname = word[nickname_idx]
+    in_channel = word[3]
     if word[nickname_flag_idx].find('H') != -1:
         nickname_flag = 'H'
     else:
@@ -65,6 +67,10 @@ def WhoRPL(word,word_eol,userdata):
             AllUsers[network][nickname] = nickname_flag
     else:
         AllUsers[network] = {nickname: nickname_flag}
+    if network in list(ScanProgress.keys()) and ScanProgress[network] == in_channel:
+        return hexchat.EAT_ALL
+    else:
+        return hexchat.EAT_NONE
 
 def debg(word,word_eol,userdata):
     print(list(AllUsers.keys()))
@@ -105,7 +111,7 @@ def WhoEND(word,word_eol,userdata):
     network = hexchat.get_info('network')
     channel = word[3]
     if network not in list(ScanProgress.keys()):
-        return
+        return hexchat.EAT_NONE
     if channel == ScanProgress[network]:
         #hexchat.find_context().prnt('finished ' + channel + ' at ' + network)
         chidx = AllChannels[network].index(channel)
@@ -117,6 +123,9 @@ def WhoEND(word,word_eol,userdata):
         else:
             ScanProgress[network] = ''
             # hexchat.find_context().prnt('stopped at ' + network)
+        return hexchat.EAT_ALL
+    else:
+        return hexchat.EAT_NONE
 
 def UserQuit(word,word_eol,userdata):
     global AllUsers
@@ -138,7 +147,8 @@ def UserPart(word,word_eol,userdata):
                 for user in users:
                     if nickname == user.nick:
                         return
-        del AllUsers[network][nickname]
+        if nickname in list(AllUsers[network].keys()):
+            del AllUsers[network][nickname]
 
 def UserKick(word,word_eol,userdata):
     global AllUsers
@@ -153,7 +163,8 @@ def UserKick(word,word_eol,userdata):
                 for user in users:
                     if nickname == user.nick:
                         return
-        del AllUsers[network][nickname]
+        if nickname in list(AllUsers[network].keys()):
+            del AllUsers[network][nickname]
 
 def NickChange(word,word_eol,userdata):
     global AllUsers
@@ -171,6 +182,6 @@ hexchat.hook_print('Part',UserPart)
 hexchat.hook_print('Kick',UserKick)
 hexchat.hook_print('Quit',UserQuit)
 hexchat.hook_print('Change Nick',NickChange)
-Timer_hk = hexchat.hook_timer(5000,WhoScanStart)
+Timer_hk = hexchat.hook_timer(8000,WhoScanStart)
 hexchat.hook_unload(unload_callback)
 print("\0034" + __module_name__ + '\tVersion ' + __module_version__ + ' loaded.\003')
